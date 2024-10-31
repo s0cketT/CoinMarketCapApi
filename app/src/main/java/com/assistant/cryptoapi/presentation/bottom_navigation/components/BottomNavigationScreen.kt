@@ -48,7 +48,7 @@ fun BottomNavigationScreen(
         Scaffold(
             bottomBar = {
                 NavigationBar(modifier = Modifier
-                    .size((width * 1).dp, (height * 0.1).dp),
+                    .size((width * 1).dp, (height * 0.15).dp),
                         containerColor = BackGroundBottomNav
                 ) {
                     bottomNavigationViewModel.items.forEachIndexed { index, item ->
