@@ -10,5 +10,7 @@ sealed class Screen(val route: String) {
 
     object BottomNavigationHomeScreen: Screen("Рынок")
     object BottomNavigationSearchScreen: Screen("Поиск")
+    object BottomNavigationPortfolioScreen: Screen("Портфель")
+    object BottomNavigationPortfolioAddNewTransactionScreen: Screen("Добавление новой транзакции")
 
 }

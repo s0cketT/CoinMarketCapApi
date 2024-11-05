@@ -1,4 +1,4 @@
-package com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_detail.components.social_networks
+package com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components.social_networks
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.assistant.cryptoapi.R
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_detail.CoinDetailViewModel
+import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.CoinDetailViewModel
 import com.assistant.cryptoapi.presentation.ui.theme.BackGroundBottomNav
 
 @Composable

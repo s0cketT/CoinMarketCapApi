@@ -10,7 +10,7 @@ import com.assistant.cryptoapi.common.Resource
 import com.assistant.cryptoapi.domain.use_case.get_coin.GetCoinByIdUseCase
 import com.assistant.cryptoapi.domain.use_case.get_exchange.GetExchangeUseCase
 import com.assistant.cryptoapi.domain.use_case.get_exchange_by_id.GetExchangeByIdUseCase
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_detail.CoinDetailState
+import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.CoinDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

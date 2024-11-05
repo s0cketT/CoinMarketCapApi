@@ -1,4 +1,4 @@
-package com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_detail.components
+package com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components
 
 import android.util.Log
 import androidx.compose.foundation.border

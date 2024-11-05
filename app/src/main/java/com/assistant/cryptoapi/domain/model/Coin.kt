@@ -19,7 +19,7 @@ data class Quote(
 
 data class USDData(
     val market_cap: Double,
-    val price: String,
+    var price: String,
     val percent_change_24h: Double,
     val percent_change_1h: Double,
     val percent_change_7d: Double,

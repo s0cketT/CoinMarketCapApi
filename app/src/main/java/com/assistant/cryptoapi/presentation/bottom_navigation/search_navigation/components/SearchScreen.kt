@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.assistant.cryptoapi.presentation.Screen
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_detail.components.CoinDetailScreen
+import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components.CoinDetailScreen
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.CoinListItem
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.exchange_list.ExchangeListViewModel

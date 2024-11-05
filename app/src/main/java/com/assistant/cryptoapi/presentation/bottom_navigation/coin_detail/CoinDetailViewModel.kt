@@ -1,4 +1,4 @@
-package com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_detail
+package com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail
 
 import android.content.Context
 import android.content.Intent
@@ -34,13 +34,11 @@ class CoinDetailViewModel @Inject constructor(
     private val _star = mutableStateOf(false)
     val star: State<Boolean> = _star
 
-    fun changeStar() { _star.value = !star.value }
+    fun changeStar(temp: Boolean) { _star.value = temp }
 
 
-    private val _coinId = mutableStateOf("")
-    val coinId: State<String> = _coinId
-
-    fun changeIndex(index: Int) { _coinId.value = index.toString() }
+    private val _coinId = mutableStateOf(-1)
+    val coinId: State<Int> = _coinId
 
 
     fun openLink(url: String, context: Context) {
@@ -51,8 +49,8 @@ class CoinDetailViewModel @Inject constructor(
 
     init {
         savedStateHandle.get<String>(Constants.PARAM_COIN_ID)?.let { coinId ->
+            _coinId.value = coinId.toInt()
             getCoin(coinId)
-
         }
     }
 

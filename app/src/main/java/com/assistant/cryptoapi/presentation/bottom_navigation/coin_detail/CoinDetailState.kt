@@ -1,4 +1,4 @@
-package com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_detail
+package com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail
 
 import com.assistant.cryptoapi.domain.model.Coin
 import com.assistant.cryptoapi.domain.model.CoinDetail

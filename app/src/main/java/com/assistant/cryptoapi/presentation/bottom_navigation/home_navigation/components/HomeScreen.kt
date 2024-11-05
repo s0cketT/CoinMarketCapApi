@@ -1,5 +1,6 @@
 package com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.components
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -24,6 +25,7 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -42,7 +44,7 @@ import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.Ho
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.HourCoinsItem
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.TabRowItems
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_detail.CoinDetailViewModel
+import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.CoinDetailViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.TopCoinsItem
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.CoinListItem
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.HourCoins
@@ -51,9 +53,12 @@ import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.ex
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.TopCoins
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.exchange_list.ExchangeListViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.exchange_list.components.ExchangeListItem
+import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.favorites_list.FavoritesViewModel
+import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.favorites_list.components.FavoritesListItem
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.global_metrics.components.GlobalMetrics
 import com.assistant.cryptoapi.presentation.ui.theme.BackGround
 import com.assistant.cryptoapi.presentation.ui.theme.IndicatorTabRow
+import com.catching.pucks.database.DataBase.CoinDB
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -63,13 +68,16 @@ fun HomeScreen(
     bottomNavController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel(),
     coinListViewModel: CoinListViewModel = hiltViewModel(),
-    exchangeListViewModel: ExchangeListViewModel = hiltViewModel()
+    exchangeListViewModel: ExchangeListViewModel = hiltViewModel(),
+    favoritesViewModel: FavoritesViewModel = hiltViewModel()
 ) {
     val coinList = coinListViewModel.state.value
+    Log.d("vnenvue", coinList.toString())
     val exchangeList = exchangeListViewModel.state.value
+    val favoritesList = favoritesViewModel.list.collectAsState(emptyList())
 
     val tabItems = TabRowItems()
-    val tabTitles = listOf(tabItems.coins, tabItems.exchanges)
+    val tabTitles = listOf(tabItems.coins, tabItems.favorites, tabItems.exchanges)
 
     val width = LocalConfiguration.current.screenWidthDp
     val height = LocalConfiguration.current.screenHeightDp
@@ -77,6 +85,31 @@ fun HomeScreen(
     val context = LocalContext.current
 
     var selectedTabIndex = homeViewModel.selectedTabIndex.value
+
+    coinList.coins?.let { coins ->
+        favoritesList.value?.forEach { coin ->
+            val favoriteItem = coins.firstOrNull { it.id.toInt() == coin.coinId }
+
+            if (favoriteItem != null) {
+                favoritesViewModel.updateCoin(
+                    CoinDB(
+                        0,
+                        favoriteItem.id.toInt(),
+                        true,
+                        favoriteItem.cmc_rank,
+                        favoriteItem?.quote?.USD?.price!!,
+                        favoriteItem?.quote.USD.market_cap,
+                        favoriteItem.quote.USD.percent_change_24h,
+                        favoriteItem.quote.USD.percent_change_1h,
+                        favoriteItem.quote.USD.percent_change_7d,
+                        favoriteItem.quote.USD.percent_change_30d,
+                    )
+                )
+            } else {
+                // Элемент не найден
+            }
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize().background(BackGround),
@@ -188,6 +221,23 @@ fun HomeScreen(
                                             ).show()
                                         })
                                 }
+                                1 -> {
+                                    HourCoins(
+                                        width,
+                                        listOf(
+                                            HourCoinsItem("1 час", "1h%", 1),
+                                            HourCoinsItem("24 часа", "24h%", 24),
+                                            HourCoinsItem("7 дней", "7d%", 7),
+                                            HourCoinsItem("30 дней", "30d%", 30),
+                                        ),
+                                        onItemClick = {
+                                            Toast.makeText(
+                                                context,
+                                                it.text,
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        })
+                                }
                             }
                         }
 
@@ -198,7 +248,8 @@ fun HomeScreen(
                         ) {
                             when (selectedTabIndex) {
                                 0 -> InfoCoins(width)
-                                1 -> InfoExchanges(width)
+                                1 -> InfoCoins(width)
+                                2 -> InfoExchanges(width)
                             }
                         }
                     }
@@ -229,6 +280,41 @@ fun HomeScreen(
                             }
                         }
                         1 -> {
+                            coinList.coins?.let { coins ->
+                                Log.d("fieivne", favoritesList.value.toString())
+                                val sortedCoins =
+                                    if (coinListViewModel.activeIndex.value == 1) {
+                                    if (coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.cmc_rank.toInt() }
+                                    else favoritesList.value.sortedBy { it.cmc_rank.toInt() }
+                                } else if (coinListViewModel.activeIndex.value == 2) {
+                                    if (!coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.market_cap }
+                                    else favoritesList.value.sortedBy { it.market_cap }
+                                } else if (coinListViewModel.activeIndex.value == 3) {
+                                    if (!coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.price.toDouble() }
+                                    else  favoritesList.value.sortedBy { it.price.toDouble() }
+                                } else {
+                                    if (!coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.percent_change_24h }
+                                    else  favoritesList.value.sortedBy { it.percent_change_24h }
+                                }
+
+                                //берем монету из БД
+                                items(sortedCoins) { coin ->
+                                    Log.d("coinren", coin.id.toString())
+                                   val favoriteItem = coins.firstOrNull { it.id == coin.coinId.toString() }
+
+                                    if (favoriteItem != null) {
+                                        FavoritesListItem(
+                                            favoriteItem,
+                                            onItemClick = { navContriller.navigate(Screen.CoinDetailScreen.route + "/${coin.coinId}") }
+                                            )
+                                    }
+
+                                    Spacer(modifier = Modifier.size((width * 0.05).dp))
+                                }
+
+                            }
+                        }
+                        2 -> {
                             exchangeList.exchanges?.let { exchanges ->
 
                                 items(exchanges) { exchange ->

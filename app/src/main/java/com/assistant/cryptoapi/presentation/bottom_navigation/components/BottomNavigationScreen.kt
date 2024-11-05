@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.assistant.cryptoapi.presentation.Screen
 import com.assistant.cryptoapi.presentation.bottom_navigation.BottomNavigationViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.components.HomeScreen
+import com.assistant.cryptoapi.presentation.bottom_navigation.portfolio_navigation.components.PortfolioScreen
 import com.assistant.cryptoapi.presentation.bottom_navigation.search_navigation.components.SearchScreen
 import com.assistant.cryptoapi.presentation.ui.theme.BackGroundBottomNav
 
@@ -53,7 +54,7 @@ fun BottomNavigationScreen(
                 ) {
                     bottomNavigationViewModel.items.forEachIndexed { index, item ->
                         NavigationBarItem(
-                            selected = bottomNavigationViewModel.selectedItemIndex == index,
+                            selected = bottomNavigationViewModel.selectedItemIndex.value == index,
                             onClick = {
                                 bottomNavigationViewModel.selectItem(index)
                                 bottomNavController.navigate(item.title)
@@ -65,26 +66,16 @@ fun BottomNavigationScreen(
                             },
                             alwaysShowLabel = false,
                             icon = {
-                                BadgedBox(
-                                    badge = {
-                                        if (item.badgeCount != null) {
-                                            Badge {
-                                                Text(text = item.badgeCount.toString())
-                                            }
-                                        } else if (item.hasNews) {
-                                            Badge()
-                                        }
-                                    }
-                                ) {
+
                                     Icon(
-                                        imageVector = if (index == bottomNavigationViewModel.selectedItemIndex) {
+                                        imageVector = if (index == bottomNavigationViewModel.selectedItemIndex.value) {
                                             item.selectedIcon
                                         } else item.unselectedIcon,
                                         contentDescription = item.title,
-                                        tint = if (index == bottomNavigationViewModel.selectedItemIndex) Color.Blue
+                                        tint = if (index == bottomNavigationViewModel.selectedItemIndex.value) Color.Blue
                                                 else Color.Gray
                                     )
-                                }
+
                             },
                             colors = NavigationBarItemDefaults.colors(
                                 indicatorColor = Color.Transparent
@@ -106,6 +97,10 @@ fun BottomNavigationScreen(
                     SearchScreen(
                         navController = navController,
                         width = width, height = height)
+                }
+
+                composable(Screen.BottomNavigationPortfolioScreen.route) {
+                    PortfolioScreen(navController = navController)
                 }
             }
         }

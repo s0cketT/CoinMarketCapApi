@@ -3,15 +3,19 @@ package com.assistant.cryptoapi.presentation.bottom_navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingCart
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -38,18 +42,19 @@ class BottomNavigationViewModel @Inject constructor(): ViewModel() {
             hasNews = false,
         ),
         BottomNavigationItem(
-            title = "Settings",
-            selectedIcon = Icons.Filled.Settings,
-            unselectedIcon = Icons.Outlined.Settings,
+            title = Screen.BottomNavigationPortfolioScreen.route,
+            selectedIcon = Icons.Filled.List,
+            unselectedIcon = Icons.Outlined.List,
             hasNews = true,
         ),
     )
 
-    var selectedItemIndex by mutableStateOf(0)
-        private set
+    private val _selectedItemIndex = mutableIntStateOf(0)
+    val selectedItemIndex: State<Int> = _selectedItemIndex
+
 
     fun selectItem(index: Int) {
-        selectedItemIndex = index
+        _selectedItemIndex.value = index
     }
 
 }

@@ -27,8 +27,6 @@ interface CoinPaprikaApi {
         @Query("sort") sort : String,
         @Query("CMC_PRO_API_KEY") api: String = Constants.API_KEY): Exchange
 
-   /* @GET("coins/{coinId}")
-    suspend fun getCoinById(@Path("coinId") coinId: String): CoinDetail*/
 
     @GET("cryptocurrency/info")
     suspend fun getCoinById(

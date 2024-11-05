@@ -67,7 +67,7 @@ class CoinListViewModel @Inject constructor(private val getCoinsUseCase: GetCoin
         getCoins(limit.value)
     }
 
-    private fun getCoins(limit: Int) {
+     private fun getCoins(limit: Int) {
         getCoinsUseCase(limit).onEach { result ->
             when (result) {
                 is Resource.Success -> {

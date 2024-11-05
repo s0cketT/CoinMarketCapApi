@@ -49,6 +49,7 @@ import coil.request.ImageRequest
 import coil.size.Scale
 import com.assistant.cryptoapi.R
 import com.assistant.cryptoapi.presentation.Screen
+import com.assistant.cryptoapi.presentation.bottom_navigation.BottomNavigationViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.CoinListItem
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.formatFloat
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.global_metrics.GlobalMetricsViewModel
@@ -60,7 +61,8 @@ fun GlobalMetrics(
     width: Int,
     bottomNavController: NavController,
     viewmodel: GlobalMetricsViewModel = hiltViewModel(),
-    searchViewModel: SearchViewModel = hiltViewModel()
+    searchViewModel: SearchViewModel = hiltViewModel(),
+    bottomNavigationViewModel: BottomNavigationViewModel = hiltViewModel()
     ) {
 
     val globalMetricsState = viewmodel.globalMetricsState.value
@@ -87,7 +89,9 @@ fun GlobalMetrics(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                        IconButton(onClick = { bottomNavController.navigate(Screen.BottomNavigationSearchScreen.route) }) {
+                        IconButton(onClick = {
+                            bottomNavController.navigate(Screen.BottomNavigationSearchScreen.route)
+                        }) {
                             Icon(
                                 imageVector = Icons.Filled.Search,
                                 contentDescription = "Favorite Icon",
