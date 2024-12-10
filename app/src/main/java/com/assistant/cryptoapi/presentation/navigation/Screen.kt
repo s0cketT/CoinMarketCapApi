@@ -1,4 +1,4 @@
-package com.assistant.cryptoapi.presentation
+package com.assistant.cryptoapi.presentation.navigation
 
 sealed class Screen(val route: String) {
     object CoinListScreen: Screen("coin_list_screen")
@@ -12,5 +12,9 @@ sealed class Screen(val route: String) {
     object BottomNavigationSearchScreen: Screen("Поиск")
     object BottomNavigationPortfolioScreen: Screen("Портфель")
     object BottomNavigationPortfolioAddNewTransactionScreen: Screen("Добавление новой транзакции")
+
+
+    object LogInScreen: Screen("Вход пользователя")
+    object RegisterScreen: Screen("Регистрация пользователя")
 
 }

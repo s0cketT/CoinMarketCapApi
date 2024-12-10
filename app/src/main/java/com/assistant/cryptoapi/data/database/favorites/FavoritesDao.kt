@@ -20,6 +20,6 @@ interface CoinDao{
     suspend fun delete(coin: CoinDB)
 
     @Query("SELECT * FROM coinFavorites")
-    fun getAllUsers(): Flow<List<CoinDB>>
+    fun getAllCoinFavorites(): Flow<List<CoinDB>>
 
 }

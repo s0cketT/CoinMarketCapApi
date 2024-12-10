@@ -7,7 +7,9 @@ import androidx.room.PrimaryKey
 data class CoinPortfolioDB(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    var id: Int,
+    val mail: String,
+    val password: String,
     val coinId: Int,
     val name: String,
     val cmc_rank: String,

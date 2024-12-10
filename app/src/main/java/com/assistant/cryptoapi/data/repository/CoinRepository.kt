@@ -13,7 +13,5 @@ class CoinRepository @Inject constructor(private val coinApi: CoinPaprikaApi) {
     suspend fun getExchanges(limit : Int, sort: String) = coinApi.getExchanges(limit, sort)
     suspend fun getExchangeById(exchangeId: String) = coinApi.getExchangeById(exchangeId)
 
-
-
     suspend fun getGlobalMetrics() = coinApi.getGlobalMetrics()
 }

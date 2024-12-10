@@ -22,22 +22,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.assistant.cryptoapi.domain.model.CoinListResponse
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.formatFloat
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.formatNumber
+import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.portfolio_navigation.PortfolioViewModel
 
 @Composable
 fun PortfolioSearchCoinListItem(
     coin: CoinListResponse,
     width: Int,
-    portfolioViewModel: PortfolioViewModel = hiltViewModel()
+    portfolioViewModel: PortfolioViewModel = hiltViewModel(),
+    viewModel: CoinListViewModel = hiltViewModel(),
 ) {
 
     Row(
         modifier = Modifier
             .size((width * 0.9).dp, (width * 0.1).dp)
             .clickable {
-                portfolioViewModel.onTextPrice(formatFloat(coin.quote.USD.price.toDouble()))
+                portfolioViewModel.onTextPrice(viewModel.formatFloat(coin.quote.USD.price.toDouble()))
                 portfolioViewModel.coinClickSymbol.value = coin.symbol
                 portfolioViewModel.coinClick.value = coin
                 portfolioViewModel.changeIsVisible()

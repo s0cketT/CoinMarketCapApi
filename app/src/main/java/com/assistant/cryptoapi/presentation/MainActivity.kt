@@ -4,35 +4,34 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.assistant.cryptoapi.presentation.bottom_navigation.components.BottomNavigationScreen
-import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components.CoinDetailScreen
-import com.assistant.cryptoapi.presentation.bottom_navigation.exchange_detail.components.ExchangeDetailScreen
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.global_metrics.GlobalMetricsViewModel
-import com.assistant.cryptoapi.presentation.bottom_navigation.portfolio_navigation.components.AddNewTransaction
+import com.assistant.cryptoapi.presentation.navigation.components.Navigation
 import com.assistant.cryptoapi.presentation.ui.theme.CryptoApiTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -43,8 +42,6 @@ class MainActivity : ComponentActivity() {
             CryptoApiTheme {
                 val width = LocalConfiguration.current.screenWidthDp
                 val height = LocalConfiguration.current.screenHeightDp
-
-
                 /*val navController = rememberNavController()
 
                 NavHost(navController = navController, startDestination = Screen.CoinListScreen.route) {
@@ -56,41 +53,96 @@ class MainActivity : ComponentActivity() {
                         CoinDetailScreen()
                     }
                 }*/
-                val navController = rememberNavController()
 
-                NavHost(navController = navController, startDestination = Screen.BottomNavigationScreen.route) {
-
-                    composable("${Screen.BottomNavigationScreen.route}") {
-                        BottomNavigationScreen(navController = navController)
-                    }
-
-                    composable("${Screen.CoinDetailScreen.route}/{coinId}") {
-                        CoinDetailScreen(width, height, navController)
-                    }
-
-                    composable("${Screen.ExchangeDetailScreen.route}/{coinId}") {
-                        ExchangeDetailScreen(width, height, navController)
-                    }
-
-                    composable(Screen.BottomNavigationPortfolioAddNewTransactionScreen.route) {
-                        AddNewTransaction(
-                            navController = navController,
-                            width = width,
-                            height = height
-                            )
-                    }
-                }
-                //CoinDetailScreen(width)
+                Navigation()
+                    //ModalDrawerRightSideExample()
+                //RightSideModalDrawerDemo()
             }
         }
     }
 }
 
-data class BottomNavigationItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val hasNews: Boolean,
-    val badgeCount: Int? = null
-)
+
+
+
+@Composable
+fun ModalDrawerRightSideExample() {
+    // Управление состоянием выдвижной панели
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        gesturesEnabled = drawerState.isOpen, // Включение жестов только при открытом состоянии
+        scrimColor = MaterialTheme.colorScheme.scrim, // Затемнение фона
+        drawerContent = {
+            // Содержимое выдвижной панели
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(0.5f) // Панель занимает половину экрана
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(16.dp)
+
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        text = "Меню",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                    Divider(color = MaterialTheme.colorScheme.onSurface)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Пункт 1",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { /* Обработка нажатия */ }
+                            .padding(8.dp)
+                    )
+                    Text(
+                        text = "Пункт 2",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { /* Обработка нажатия */ }
+                            .padding(8.dp)
+                    )
+                    Text(
+                        text = "Пункт 3",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { /* Обработка нажатия */ }
+                            .padding(8.dp)
+                    )
+                }
+            }
+        },
+        content = {
+            // Основной экран
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = {
+                        // Открываем выдвижную панель
+                        scope.launch { drawerState.open() }
+                    }
+                ) {
+                    Text("Открыть панель справа")
+                }
+            }
+        }
+    )
+}
+
+
 

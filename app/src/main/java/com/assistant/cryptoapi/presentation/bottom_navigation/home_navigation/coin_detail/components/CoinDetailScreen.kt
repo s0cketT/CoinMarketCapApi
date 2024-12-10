@@ -2,6 +2,7 @@ package com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.compo
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Search
@@ -32,7 +34,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,7 +44,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.assistant.cryptoapi.presentation.Screen
 import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.CoinDetailViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components.officia_links.GitHub
 import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components.officia_links.WebSite
@@ -51,6 +54,8 @@ import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.compon
 import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components.social_networks.Twitter
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.favorites_list.FavoritesViewModel
+import com.assistant.cryptoapi.presentation.bottom_navigation.profile_navigation.ProfileViewModel
+import com.assistant.cryptoapi.presentation.navigation.Screen
 import com.assistant.cryptoapi.presentation.ui.theme.BackGround
 import com.assistant.cryptoapi.presentation.ui.theme.StarCoinDetail
 import com.catching.pucks.database.DataBase.CoinDB
@@ -62,10 +67,13 @@ fun CoinDetailScreen(
     width: Int,
     height: Int,
     navController: NavController,
+    profileViewModel: ProfileViewModel = hiltViewModel(),
     coinDetailviewModel: CoinDetailViewModel = hiltViewModel(),
     coinListViewModel: CoinListViewModel = hiltViewModel(),
     favoritesViewModel: FavoritesViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+
     val coinDetail = coinDetailviewModel.state.value
     val coinList = coinListViewModel.state.value
     val list = favoritesViewModel.list.collectAsState(emptyList())
@@ -83,7 +91,6 @@ fun CoinDetailScreen(
         // Элемент не найден
     }
 
-    Log.d("listF", list.value.toString())
 
     Box(
         modifier = Modifier
@@ -104,11 +111,6 @@ fun CoinDetailScreen(
             coinList.coins.let { coins ->
                 val coinListItem = coins.firstOrNull { it.id == coinDetailviewModel.coinId.value.toString() }
 
-                if (coinListItem != null) {
-                    Log.d("priceU", coinListItem.quote.USD.price)
-                } else {
-                    // Элемент не найден
-                }
                 coinDetail.coin?.let { coinDetail ->
 
                     Row(
@@ -174,37 +176,45 @@ fun CoinDetailScreen(
 
                             IconButton(
                                 onClick = {
-                                    coinDetailviewModel.changeStar(!coinDetailviewModel.star.value)
-                                    if (coinDetailviewModel.star.value) {
-                                        favoritesViewModel.insertCoin(
-                                            CoinDB(
-                                                0,
-                                                coinDetailviewModel.coinId.value,
-                                                coinDetailviewModel.star.value,
-                                                coinListItem!!.cmc_rank,
-                                                coinListItem?.quote?.USD?.price!!,
-                                                coinListItem.quote.USD.market_cap,
-                                                coinListItem.quote.USD.percent_change_24h,
-                                                coinListItem.quote.USD.percent_change_1h,
-                                                coinListItem.quote.USD.percent_change_7d,
-                                                coinListItem.quote.USD.percent_change_30d,
+
+                                    if (!profileViewModel.onCheckUser()) {
+
+                                        coinDetailviewModel.changeStar(!coinDetailviewModel.star.value)
+                                        if (coinDetailviewModel.star.value) {
+                                            favoritesViewModel.insertCoin(
+                                                CoinDB(
+                                                    0,
+                                                    coinDetailviewModel.coinId.value,
+                                                    coinDetailviewModel.star.value,
+                                                    coinListItem!!.cmc_rank,
+                                                    coinListItem?.quote?.USD?.price!!,
+                                                    coinListItem.quote.USD.market_cap,
+                                                    coinListItem.quote.USD.percent_change_24h,
+                                                    coinListItem.quote.USD.percent_change_1h,
+                                                    coinListItem.quote.USD.percent_change_7d,
+                                                    coinListItem.quote.USD.percent_change_30d,
+                                                )
                                             )
-                                        )
-                                    } else {
-                                        favoritesViewModel.deleteCoin(
-                                            CoinDB(
-                                                favoritesViewModel.index.value,
-                                                coinDetailviewModel.coinId.value,
-                                                coinDetailviewModel.star.value,
-                                                coinListItem!!.cmc_rank,
-                                                coinListItem?.quote?.USD?.price!!,
-                                                coinListItem.quote.USD.market_cap,
-                                                coinListItem.quote.USD.percent_change_24h,
-                                                coinListItem.quote.USD.percent_change_1h,
-                                                coinListItem.quote.USD.percent_change_7d,
-                                                coinListItem.quote.USD.percent_change_30d,
+                                        } else {
+                                            favoritesViewModel.deleteCoin(
+                                                CoinDB(
+                                                    favoritesViewModel.index.value,
+                                                    coinDetailviewModel.coinId.value,
+                                                    coinDetailviewModel.star.value,
+                                                    coinListItem!!.cmc_rank,
+                                                    coinListItem?.quote?.USD?.price!!,
+                                                    coinListItem.quote.USD.market_cap,
+                                                    coinListItem.quote.USD.percent_change_24h,
+                                                    coinListItem.quote.USD.percent_change_1h,
+                                                    coinListItem.quote.USD.percent_change_7d,
+                                                    coinListItem.quote.USD.percent_change_30d,
+                                                )
                                             )
-                                        )
+                                        }
+
+                                    }
+                                    else {
+                                        Toast.makeText(context, "Войдите в аккаунт, чтобы добавлять монеты в избранное", Toast.LENGTH_SHORT).show()
                                     }
 
                                 },
@@ -243,8 +253,8 @@ fun CoinDetailScreen(
                         item() {
                             Row(
                                 modifier = Modifier
-                                    .background(BackGround)
-                                    .size((width * 1).dp, (width * 0.1).dp),
+                                    .fillMaxWidth()
+                                    .background(BackGround),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Start
                             ) {

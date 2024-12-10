@@ -15,19 +15,20 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.assistant.cryptoapi.presentation.bottom_navigation.portfolio_navigation.PortfolioViewModel
 import com.catching.pucks.database.DataBase.CoinPortfolioDB
 
 @Composable
 fun PortfolioItem(
     width: Int,
     coin: CoinPortfolioDB,
-
+    portfolioViewModel: PortfolioViewModel = hiltViewModel()
     ) {
 
     Row(
         modifier = Modifier
-            .size((width * 1).dp, (width * 0.15).dp)
-        ,
+            .size((width * 1).dp, (width * 0.15).dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -57,7 +58,7 @@ fun PortfolioItem(
 
 
             Text(
-                text = coin.averagePrice,
+                text = "${portfolioViewModel.formatNumber(coin.averagePrice.toDouble())}$",
                 color = Color.White,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
@@ -68,13 +69,13 @@ fun PortfolioItem(
 
         Column (
             modifier = Modifier
-                .size((width * 0.2).dp),
+                .size((width * 0.25).dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
-                text = "$${coin.buyPrice}",
+                text = "$${portfolioViewModel.formatLargeCurrency(coin.buyPrice)}",
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
@@ -82,7 +83,7 @@ fun PortfolioItem(
             )
 
             Text(
-                text = "${coin.count} ${coin.symbol}",
+                text = "${portfolioViewModel.formatLargeCurrency(coin.count)} ${coin.symbol}",
                 color = Color.Gray,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,

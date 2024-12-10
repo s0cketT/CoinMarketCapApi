@@ -20,13 +20,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.assistant.cryptoapi.presentation.BottomNavigationItem
-import com.assistant.cryptoapi.presentation.Screen
+import com.assistant.cryptoapi.domain.repository.UserRepository
+import com.assistant.cryptoapi.presentation.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class BottomNavigationViewModel @Inject constructor(): ViewModel() {
+class BottomNavigationViewModel @Inject constructor(private val userRepository: UserRepository): ViewModel() {
 
     val items = listOf(
         BottomNavigationItem(
@@ -48,6 +48,13 @@ class BottomNavigationViewModel @Inject constructor(): ViewModel() {
             hasNews = true,
         ),
     )
+
+    fun onCheckUser(): Boolean { return userRepository.mail == null }
+
+    fun onExitUser() {
+        userRepository.mail = null
+        userRepository.pas = null
+    }
 
     private val _selectedItemIndex = mutableIntStateOf(0)
     val selectedItemIndex: State<Int> = _selectedItemIndex

@@ -39,10 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.assistant.cryptoapi.presentation.Screen
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.exchange_list.ExchangeListViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.portfolio_navigation.PortfolioViewModel
+import com.assistant.cryptoapi.presentation.navigation.Screen
 import com.assistant.cryptoapi.presentation.ui.theme.BackGround
 import com.assistant.cryptoapi.presentation.ui.theme.BackGroundBottomNav
 
@@ -51,6 +51,7 @@ fun AddNewTransaction(
     navController: NavController,
     width: Int,
     height: Int,
+    portfolioViewModel2: PortfolioViewModel,
     portfolioViewModel: PortfolioViewModel = hiltViewModel(),
     coinsViewModel: CoinListViewModel = hiltViewModel(),
     exchangesViewModel: ExchangeListViewModel = hiltViewModel(),
@@ -77,7 +78,7 @@ fun AddNewTransaction(
     ) {
 
         if (portfolioViewModel.isVisible.value) {
-            PortfolioDialog(width)
+            PortfolioDialog(width, portfolioViewModel2)
         }
 
         Box(
@@ -115,7 +116,7 @@ fun AddNewTransaction(
 
         Box(
             modifier = Modifier
-                .size((width * 0.9).dp, (width * 0.135).dp),
+                .size((width * 0.9).dp, (width * 0.15).dp),
             contentAlignment = Alignment.Center
         ) {
             OutlinedTextField(
@@ -191,7 +192,7 @@ fun AddNewTransaction(
                 contentAlignment = Alignment.CenterStart
                 ) {
                 Text(
-                    text = "Добав. из сп. набл.",
+                    text = "Добавить в портфель",
                     color = Color.Gray,
                     fontSize = 14.sp
                 )

@@ -35,12 +35,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.assistant.cryptoapi.presentation.Screen
 import com.assistant.cryptoapi.presentation.bottom_navigation.exchange_detail.ExchangeDetailViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.CoinDetailViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components.officia_links.WebSite
 import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components.social_networks.Chat
 import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components.social_networks.Twitter
+import com.assistant.cryptoapi.presentation.navigation.Screen
 import com.assistant.cryptoapi.presentation.ui.theme.BackGround
 
 @Composable

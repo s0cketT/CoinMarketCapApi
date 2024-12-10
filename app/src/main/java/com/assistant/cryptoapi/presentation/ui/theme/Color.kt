@@ -15,3 +15,9 @@ val BackGroundBottomNav = Color(0xFF20242F)
 val TopCoinsColor = Color(0xFF2F3340)
 val IndicatorTabRow = Color(0xFF002FBA)
 val StarCoinDetail = Color(0xFFFF9800)
+val CastomBlue = Color(0xFF2283F8)
+val CastomBlueLighter = Color(0xFF7CC1FF)
+val CastomGray = Color(0xff464e5d)
+
+
+

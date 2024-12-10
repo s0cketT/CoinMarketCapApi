@@ -38,11 +38,17 @@ object DatabaseModule {
     fun providePortfolioDao(database: MainDatabase): PortfolioDao {
         return database.daoPortfolio
     }
+
+    @Provides
+    fun provideRegistrationDao(database: MainDatabase): UserDao {
+        return database.daoUser
+    }
 }
 
-@Database(entities = [CoinDB::class, CoinPortfolioDB::class], version = 2)
+@Database(entities = [CoinDB::class, CoinPortfolioDB::class, UserDB::class], version = 2)
 abstract class MainDatabase : RoomDatabase() {
     abstract val daoFavorite: CoinDao
     abstract val daoPortfolio: PortfolioDao
+    abstract val daoUser: UserDao
 
 }

@@ -40,7 +40,7 @@ class GlobalMetricsViewModel @Inject constructor(
                     _globalMetricsState.value = GlobalMetricsState(isLoading = true)
                 }
                 is Resource.Error -> {
-                    _globalMetricsState.value = GlobalMetricsState(error = result.message ?: "Cocattb")
+                    _globalMetricsState.value = GlobalMetricsState(error = result.message)
                 }
 
                 else -> {}

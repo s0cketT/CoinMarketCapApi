@@ -25,8 +25,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.assistant.cryptoapi.domain.model.CoinListResponse
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.formatFloat
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.formatNumber
 import com.catching.pucks.database.DataBase.CoinDB
 
 @Composable
@@ -79,7 +77,7 @@ fun FavoritesListItem(
                 .size((width * 0.3).dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
-                Text(text = "$${formatNumber(coin.quote.USD.price.toDouble())}",
+                Text(text = "$${viewModel.formatNumber(coin.quote.USD.price.toDouble())}",
                     color = Color.White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
@@ -95,7 +93,7 @@ fun FavoritesListItem(
             horizontalArrangement = Arrangement.End
         ) {
             if (viewModel.hourCount.value == 24) {
-                if (formatFloat(coin.quote.USD.percent_change_24h) != "0") {
+                if (viewModel.formatFloat(coin.quote.USD.percent_change_24h) != "0") {
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,
                         contentDescription = "Favorite Icon",
@@ -107,8 +105,8 @@ fun FavoritesListItem(
                 }
 
                 Text(
-                    text = "${formatFloat(coin.quote.USD.percent_change_24h)}%",
-                    color = if (formatFloat(coin.quote.USD.percent_change_24h) == "0") Color.Gray
+                    text = "${viewModel.formatFloat(coin.quote.USD.percent_change_24h)}%",
+                    color = if (viewModel.formatFloat(coin.quote.USD.percent_change_24h) == "0") Color.Gray
                     else if (coin.quote.USD.percent_change_24h < 0) Color.Red
                     else Color.Green,
                     fontSize = 15.sp,
@@ -118,7 +116,7 @@ fun FavoritesListItem(
                 )
             }
             else if (viewModel.hourCount.value == 1) {
-                if (formatFloat(coin.quote.USD.percent_change_1h) != "0") {
+                if (viewModel.formatFloat(coin.quote.USD.percent_change_1h) != "0") {
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,
                         contentDescription = "Favorite Icon",
@@ -130,8 +128,8 @@ fun FavoritesListItem(
                 }
 
                 Text(
-                    text = "${formatFloat(coin.quote.USD.percent_change_1h)}%",
-                    color = if (formatFloat(coin.quote.USD.percent_change_1h) == "0") Color.Gray
+                    text = "${viewModel.formatFloat(coin.quote.USD.percent_change_1h)}%",
+                    color = if (viewModel.formatFloat(coin.quote.USD.percent_change_1h) == "0") Color.Gray
                     else if (coin.quote.USD.percent_change_1h < 0) Color.Red
                     else Color.Green,
                     fontSize = 15.sp,
@@ -141,7 +139,7 @@ fun FavoritesListItem(
                 )
             }
             else if (viewModel.hourCount.value == 7) {
-                if (formatFloat(coin.quote.USD.percent_change_7d) != "0") {
+                if (viewModel.formatFloat(coin.quote.USD.percent_change_7d) != "0") {
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,
                         contentDescription = "Favorite Icon",
@@ -153,8 +151,8 @@ fun FavoritesListItem(
                 }
 
                 Text(
-                    text = "${formatFloat(coin.quote.USD.percent_change_7d)}%",
-                    color = if (formatFloat(coin.quote.USD.percent_change_7d) == "0") Color.Gray
+                    text = "${viewModel.formatFloat(coin.quote.USD.percent_change_7d)}%",
+                    color = if (viewModel.formatFloat(coin.quote.USD.percent_change_7d) == "0") Color.Gray
                     else if (coin.quote.USD.percent_change_7d < 0) Color.Red
                     else Color.Green,
                     fontSize = 15.sp,
@@ -164,7 +162,7 @@ fun FavoritesListItem(
                 )
             }
             else {
-                if (formatFloat(coin.quote.USD.percent_change_30d) != "0") {
+                if (viewModel.formatFloat(coin.quote.USD.percent_change_30d) != "0") {
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,
                         contentDescription = "Favorite Icon",
@@ -176,8 +174,8 @@ fun FavoritesListItem(
                 }
 
                 Text(
-                    text = "${formatFloat(coin.quote.USD.percent_change_30d)}%",
-                    color = if (formatFloat(coin.quote.USD.percent_change_30d) == "0") Color.Gray
+                    text = "${viewModel.formatFloat(coin.quote.USD.percent_change_30d)}%",
+                    color = if (viewModel.formatFloat(coin.quote.USD.percent_change_30d) == "0") Color.Gray
                     else if (coin.quote.USD.percent_change_30d < 0) Color.Red
                     else Color.Green,
                     fontSize = 15.sp,

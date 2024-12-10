@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,7 +31,8 @@ import com.assistant.cryptoapi.presentation.bottom_navigation.portfolio_navigati
 fun AddNewItemDialog(width: Int, portfolioViewModel: PortfolioViewModel = hiltViewModel()) {
 
     Row {
-        Column(modifier = Modifier,
+        Column(
+            modifier = Modifier,
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -37,7 +41,8 @@ fun AddNewItemDialog(width: Int, portfolioViewModel: PortfolioViewModel = hiltVi
                 value = portfolioViewModel.textCount.value,
                 onValueChange = {
                     if (portfolioViewModel.isValidNumber(it)) {
-                        portfolioViewModel.onTextCount(it) }
+                        portfolioViewModel.onTextCount(it)
+                    }
                 },
                 modifier = Modifier
                     .size((width * 0.35).dp, (width * 0.15).dp)
@@ -55,6 +60,7 @@ fun AddNewItemDialog(width: Int, portfolioViewModel: PortfolioViewModel = hiltVi
                     unfocusedPlaceholderColor = Color.Gray
                 ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+
                 trailingIcon = {
                     if (portfolioViewModel.textCount.value != "") {
                         IconButton(
@@ -63,10 +69,23 @@ fun AddNewItemDialog(width: Int, portfolioViewModel: PortfolioViewModel = hiltVi
                                 .size((width * 0.06).dp)
                         ) {
                             Icon(
-                                Icons.Outlined.Close, contentDescription = null, tint = Color.DarkGray,
-                                modifier = Modifier.size((width * 0.04).dp)
+                                Icons.Outlined.Close,
+                                contentDescription = null,
+                                tint = Color.DarkGray,
+                                modifier = Modifier
+                                    .size((width * 0.04).dp)
                                     .clip(RoundedCornerShape(50.dp))
                                     .background(Color.Gray)
+                            )
+                        }
+                    } else {
+                        if (portfolioViewModel.textCountIsNull.value) {
+                            Icon(
+                                imageVector = Icons.Filled.Error, // Используем стандартную иконку ошибки
+                                contentDescription = "Ошибка",
+                                tint = Color.Red,
+                                modifier = Modifier
+                                    .size((width * 0.06).dp)
                             )
                         }
                     }
@@ -76,12 +95,12 @@ fun AddNewItemDialog(width: Int, portfolioViewModel: PortfolioViewModel = hiltVi
                     Text(text = "Кол.")
 
                 },
-
-                shape = RoundedCornerShape(50)
+                shape = RoundedCornerShape(50),
             )
         }
 
-        Column(modifier = Modifier,
+        Column(
+            modifier = Modifier,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
@@ -94,7 +113,7 @@ fun AddNewItemDialog(width: Int, portfolioViewModel: PortfolioViewModel = hiltVi
                     }
                 },
                 modifier = Modifier
-                    .size((width * 0.35).dp, (width * 0.15).dp)
+                    .size((width * 0.38).dp, (width * 0.15).dp)
                     .background(Color.Transparent)
                     .clip(RoundedCornerShape(50.dp)),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -117,18 +136,31 @@ fun AddNewItemDialog(width: Int, portfolioViewModel: PortfolioViewModel = hiltVi
                                 .size((width * 0.06).dp)
                         ) {
                             Icon(
-                                Icons.Outlined.Close, contentDescription = null, tint = Color.DarkGray,
-                                modifier = Modifier.size((width * 0.04).dp)
+                                Icons.Outlined.Close,
+                                contentDescription = null,
+                                tint = Color.DarkGray,
+                                modifier = Modifier
+                                    .size((width * 0.04).dp)
                                     .clip(RoundedCornerShape(50.dp))
                                     .background(Color.Gray)
                             )
                         }
+                    } else {
+
+                        if (portfolioViewModel.textPriceIsNull.value) {
+                            Icon(
+                                imageVector = Icons.Filled.Error, // Используем стандартную иконку ошибки
+                                contentDescription = "Ошибка",
+                                tint = Color.Red,
+                                modifier = Modifier
+                                    .size((width * 0.06).dp)
+                            )
+                        }
+
                     }
                 },
                 placeholder = {
-
                     Text(text = "Цена")
-
                 },
 
                 shape = RoundedCornerShape(50)

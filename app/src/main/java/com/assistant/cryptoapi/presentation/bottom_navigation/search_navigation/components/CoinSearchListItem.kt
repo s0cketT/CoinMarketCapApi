@@ -27,14 +27,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.assistant.cryptoapi.domain.model.CoinListResponse
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.formatFloat
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.formatNumber
 
 @Composable
 fun CoinSearchListItem(
     coin: CoinListResponse,
     width: Int,
-    onItemClick: (String) -> Unit
+    onItemClick: (String) -> Unit,
+    viewModel: CoinListViewModel = hiltViewModel(),
 ) {
 
     Row(
@@ -58,7 +57,7 @@ fun CoinSearchListItem(
 
 
             Text(
-                text = "$${formatNumber(coin.quote.USD.price.toDouble())}",
+                text = "$${viewModel.formatNumber(coin.quote.USD.price.toDouble())}",
                 color = Color.White,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
@@ -73,7 +72,7 @@ fun CoinSearchListItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
-            if (formatFloat(coin.quote.USD.percent_change_24h) != "0") {
+            if (viewModel.formatFloat(coin.quote.USD.percent_change_24h) != "0") {
                 Icon(
                     imageVector = Icons.Filled.ArrowDropDown,
                     contentDescription = "Favorite Icon",
@@ -85,8 +84,8 @@ fun CoinSearchListItem(
             }
 
             Text(
-                text = "${formatFloat(coin.quote.USD.percent_change_24h)}%",
-                color = if (formatFloat(coin.quote.USD.percent_change_24h) == "0") Color.Gray
+                text = "${viewModel.formatFloat(coin.quote.USD.percent_change_24h)}%",
+                color = if (viewModel.formatFloat(coin.quote.USD.percent_change_24h) == "0") Color.Gray
                 else if (coin.quote.USD.percent_change_24h < 0) Color.Red
                 else Color.Green,
                 fontSize = 15.sp,

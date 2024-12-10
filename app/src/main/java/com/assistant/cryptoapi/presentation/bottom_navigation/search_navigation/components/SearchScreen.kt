@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.assistant.cryptoapi.presentation.Screen
 import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components.CoinDetailScreen
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.CoinListItem
@@ -54,6 +53,7 @@ import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.ex
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.exchange_list.components.ExchangeListItem
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.exchange_list.components.InfoExchanges
 import com.assistant.cryptoapi.presentation.bottom_navigation.search_navigation.SearchViewModel
+import com.assistant.cryptoapi.presentation.navigation.Screen
 import com.assistant.cryptoapi.presentation.ui.theme.BackGround
 import com.assistant.cryptoapi.presentation.ui.theme.BackGroundBottomNav
 import com.assistant.cryptoapi.presentation.ui.theme.TopCoinsColor
@@ -89,7 +89,7 @@ fun SearchScreen(
         ) {
 
         Box(modifier = Modifier
-            .size((width * 0.9).dp, (width * 0.135).dp),
+            .size((width * 0.9).dp, (width * 0.15).dp),
             contentAlignment = Alignment.Center
         ) {
             OutlinedTextField(
@@ -102,7 +102,8 @@ fun SearchScreen(
                     .onFocusChanged {
                         searchViewModel.changeIsFocus(it.isFocused)
                     }
-                    .focusRequester(focusRequester),
+                    .focusRequester(focusRequester)
+                    .align(Alignment.Center),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
                     unfocusedBorderColor = Color.Transparent,
@@ -140,7 +141,9 @@ fun SearchScreen(
                 },
                 placeholder = {
                     if (text.isEmpty()) {
-                        Text(text = "Поиск монет")
+                        Text(text = "Поиск монет",
+                            fontSize = 16.sp,
+                            )
                     }
                 },
 

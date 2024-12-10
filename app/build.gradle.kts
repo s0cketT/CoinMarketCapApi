@@ -3,16 +3,18 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.assistant.cryptoapi"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.assistant.cryptoapi"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -52,6 +54,11 @@ android {
 }
 
 dependencies {
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+
+    implementation("androidx.compose.material:material-icons-extended:1.5.1") // Убедитесь, что версия актуальная
+
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")

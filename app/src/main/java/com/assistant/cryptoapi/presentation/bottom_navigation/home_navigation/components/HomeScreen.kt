@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
@@ -26,7 +28,6 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,12 +40,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.assistant.cryptoapi.presentation.Screen
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.HomeViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.HourCoinsItem
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.TabRowItems
-import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.CoinDetailViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.TopCoinsItem
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.CoinListItem
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.HourCoins
@@ -56,9 +55,13 @@ import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.ex
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.favorites_list.FavoritesViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.favorites_list.components.FavoritesListItem
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.global_metrics.components.GlobalMetrics
+import com.assistant.cryptoapi.presentation.bottom_navigation.profile_navigation.ProfileViewModel
+import com.assistant.cryptoapi.presentation.bottom_navigation.profile_navigation.register.RegisterViewModel
+import com.assistant.cryptoapi.presentation.navigation.Screen
 import com.assistant.cryptoapi.presentation.ui.theme.BackGround
 import com.assistant.cryptoapi.presentation.ui.theme.IndicatorTabRow
 import com.catching.pucks.database.DataBase.CoinDB
+import kotlinx.coroutines.CoroutineScope
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -66,6 +69,9 @@ import com.catching.pucks.database.DataBase.CoinDB
 fun HomeScreen(
     navContriller: NavController,
     bottomNavController: NavController,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+    registerViewModel: RegisterViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
     coinListViewModel: CoinListViewModel = hiltViewModel(),
     exchangeListViewModel: ExchangeListViewModel = hiltViewModel(),
@@ -97,8 +103,8 @@ fun HomeScreen(
                         favoriteItem.id.toInt(),
                         true,
                         favoriteItem.cmc_rank,
-                        favoriteItem?.quote?.USD?.price!!,
-                        favoriteItem?.quote.USD.market_cap,
+                        favoriteItem.quote.USD.price,
+                        favoriteItem.quote.USD.market_cap,
                         favoriteItem.quote.USD.percent_change_24h,
                         favoriteItem.quote.USD.percent_change_1h,
                         favoriteItem.quote.USD.percent_change_7d,
@@ -112,7 +118,9 @@ fun HomeScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize().background(BackGround),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BackGround),
         contentAlignment = Alignment.TopCenter
     ) {
         Column(
@@ -126,211 +134,267 @@ fun HomeScreen(
 
             LazyColumn(
                 modifier = Modifier
-                    .size((width * 0.9).dp, (height * 0.9).dp)
+                    .size((width * 0.9).dp, (height * 0.89).dp)
             ) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .size((width * 1).dp, (height * 0.16).dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            GlobalMetrics(width, bottomNavController)
-                        }
-
-                        Spacer(modifier = Modifier.size(10.dp))
+                item {
+                    Box(
+                        modifier = Modifier
+                            .size((width * 1).dp, (height * 0.16).dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        GlobalMetrics(width, bottomNavController, navContriller, scope, drawerState)
                     }
 
-                    stickyHeader {
+                    Spacer(modifier = Modifier.size(10.dp))
+                }
 
-                        Row(modifier = Modifier
+                stickyHeader {
+
+                    Row(
+                        modifier = Modifier
                             .size((width * 0.9).dp, (width * 0.15).dp)
                             .background(BackGround),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        TabRow(
+                            selectedTabIndex = selectedTabIndex,
+                            indicator = { tabPositions ->
+                                TabRowDefaults.Indicator(
+                                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                                    color = IndicatorTabRow
+                                )
+                            },
+                            containerColor = Color.Transparent
                         ) {
-                            TabRow(
-                                selectedTabIndex = selectedTabIndex,
-                                indicator = { tabPositions ->
-                                    TabRowDefaults.Indicator(
-                                        modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                                        color = IndicatorTabRow
-                                    )
-                                },
-                                containerColor = Color.Transparent
-                            ) {
-                                tabTitles.forEachIndexed { index, title ->
-                                    Tab(
-                                        selected = selectedTabIndex == index,
-                                        onClick = {
-                                            selectedTabIndex = index
-                                            homeViewModel.changeSelectedTabIndex(selectedTabIndex)
-                                                  },
-                                        text = {
-                                            Text(text = title,
-                                                fontSize = 16.sp,
-                                                color = Color.White,
-                                                fontWeight = FontWeight.Bold
-                                        ) }
-                                    )
-                                }
-                            }
-                        }
-
-                        Row(modifier = Modifier
-                            .size((width * 0.9).dp, (width * 0.08).dp)
-                            .clickable(
-                                indication = null,
-                                interactionSource = remember { MutableInteractionSource() }
-                            ) { }
-                            .background(BackGround),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start
-                        ) {
-                            when (selectedTabIndex) {
-                                0 -> {
-                                    TopCoins(
-                                        width,
-                                        listOf(
-                                            TopCoinsItem("Топ 100", 100),
-                                            TopCoinsItem("Топ 200", 200),
-                                            TopCoinsItem("Топ 500", 500)
-                                        ),
-                                        onItemClick = {
-                                            Toast.makeText(
-                                                context,
-                                                it.text,
-                                                Toast.LENGTH_LONG
-                                            ).show()
-                                        })
-
-                                    Spacer(modifier = Modifier.size((width * 0.05).dp))
-
-                                    HourCoins(
-                                        width,
-                                        listOf(
-                                            HourCoinsItem("1 час", "1h%", 1),
-                                            HourCoinsItem("24 часа", "24h%", 24),
-                                            HourCoinsItem("7 дней", "7d%", 7),
-                                            HourCoinsItem("30 дней", "30d%", 30),
-                                        ),
-                                        onItemClick = {
-                                            Toast.makeText(
-                                                context,
-                                                it.text,
-                                                Toast.LENGTH_LONG
-                                            ).show()
-                                        })
-                                }
-                                1 -> {
-                                    HourCoins(
-                                        width,
-                                        listOf(
-                                            HourCoinsItem("1 час", "1h%", 1),
-                                            HourCoinsItem("24 часа", "24h%", 24),
-                                            HourCoinsItem("7 дней", "7d%", 7),
-                                            HourCoinsItem("30 дней", "30d%", 30),
-                                        ),
-                                        onItemClick = {
-                                            Toast.makeText(
-                                                context,
-                                                it.text,
-                                                Toast.LENGTH_LONG
-                                            ).show()
-                                        })
-                                }
-                            }
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .size((width * 0.9).dp, (width * 0.1).dp)
-                                .background(BackGround)
-                        ) {
-                            when (selectedTabIndex) {
-                                0 -> InfoCoins(width)
-                                1 -> InfoCoins(width)
-                                2 -> InfoExchanges(width)
+                            tabTitles.forEachIndexed { index, title ->
+                                Tab(
+                                    selected = selectedTabIndex == index,
+                                    onClick = {
+                                        selectedTabIndex = index
+                                        homeViewModel.changeSelectedTabIndex(selectedTabIndex)
+                                    },
+                                    text = {
+                                        Text(
+                                            text = title,
+                                            fontSize = 14.sp,
+                                            color = Color.White,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                )
                             }
                         }
                     }
 
-                    when (selectedTabIndex) {
-                        0 -> {
-                            coinList.coins?.let { coins ->
-                                val sortedCoins = if (coinListViewModel.activeIndex.value == 1) {
-                                    if (coinListViewModel.arrow.value) coins.sortedByDescending { it.cmc_rank.toInt() }
-                                    else coins.sortedBy { it.cmc_rank.toInt() }
-                                } else if (coinListViewModel.activeIndex.value == 2) {
-                                    if (!coinListViewModel.arrow.value) coins.sortedByDescending { it.quote.USD.market_cap }
-                                    else coins.sortedBy { it.quote.USD.market_cap }
-                                } else if (coinListViewModel.activeIndex.value == 3) {
-                                    if (!coinListViewModel.arrow.value) coins.sortedByDescending { it.quote.USD.price.toDouble() }
-                                    else coins.sortedBy { it.quote.USD.price.toDouble() }
-                                } else {
-                                    if (!coinListViewModel.arrow.value) coins.sortedByDescending { it.quote.USD.percent_change_24h }
-                                    else coins.sortedBy { it.quote.USD.percent_change_24h }
-                                }
-                                items(sortedCoins) { coin ->
-                                    CoinListItem(
-                                        coin = coin,
-                                        onItemClick = { navContriller.navigate(Screen.CoinDetailScreen.route + "/${coin.id}") }
-                                    )
-                                    Spacer(modifier = Modifier.size((width * 0.05).dp))
+                    Row(modifier = Modifier
+                        .size((width * 0.9).dp, (width * 0.08).dp)
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) { }
+                        .background(BackGround),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        when (selectedTabIndex) {
+                            0 -> {
+                                TopCoins(
+                                    width,
+                                    listOf(
+                                        TopCoinsItem("Топ 100", 100),
+                                        TopCoinsItem("Топ 200", 200),
+                                        TopCoinsItem("Топ 500", 500)
+                                    ),
+                                    onItemClick = {
+                                        Toast.makeText(
+                                            context,
+                                            it.text,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    })
+
+                                Spacer(modifier = Modifier.size((width * 0.05).dp))
+
+                                HourCoins(
+                                    width,
+                                    listOf(
+                                        HourCoinsItem("1 час", "1h%", 1),
+                                        HourCoinsItem("24 часа", "24h%", 24),
+                                        HourCoinsItem("7 дней", "7d%", 7),
+                                        HourCoinsItem("30 дней", "30d%", 30),
+                                    ),
+                                    onItemClick = {
+                                        Toast.makeText(
+                                            context,
+                                            it.text,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    })
+                            }
+
+                            1 -> {
+
+                                if (!registerViewModel.onCheckUser()) {
+                                    HourCoins(
+                                        width,
+                                        listOf(
+                                            HourCoinsItem("1 час", "1h%", 1),
+                                            HourCoinsItem("24 часа", "24h%", 24),
+                                            HourCoinsItem("7 дней", "7d%", 7),
+                                            HourCoinsItem("30 дней", "30d%", 30),
+                                        ),
+                                        onItemClick = {
+                                            Toast.makeText(
+                                                context,
+                                                it.text,
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        })
                                 }
                             }
                         }
-                        1 -> {
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .size((width * 0.9).dp, (width * 0.1).dp)
+                            .background(BackGround)
+                    ) {
+                        when (selectedTabIndex) {
+                            0 -> InfoCoins(width)
+                            1 -> {
+                                if (!registerViewModel.onCheckUser()) {
+                                    InfoCoins(width)
+                                }
+                            }
+                            2 -> InfoExchanges(width)
+                        }
+                    }
+                }
+
+                when (selectedTabIndex) {
+                    0 -> {
+                        coinList.coins?.let { coins ->
+                            val sortedCoins = if (coinListViewModel.activeIndex.value == 1) {
+                                if (coinListViewModel.arrow.value) coins.sortedByDescending { it.cmc_rank.toInt() }
+                                else coins.sortedBy { it.cmc_rank.toInt() }
+                            } else if (coinListViewModel.activeIndex.value == 2) {
+                                if (!coinListViewModel.arrow.value) coins.sortedByDescending { it.quote.USD.market_cap }
+                                else coins.sortedBy { it.quote.USD.market_cap }
+                            } else if (coinListViewModel.activeIndex.value == 3) {
+                                if (!coinListViewModel.arrow.value) coins.sortedByDescending { it.quote.USD.price.toDouble() }
+                                else coins.sortedBy { it.quote.USD.price.toDouble() }
+                            } else {
+                                if (!coinListViewModel.arrow.value) coins.sortedByDescending { it.quote.USD.percent_change_24h }
+                                else coins.sortedBy { it.quote.USD.percent_change_24h }
+                            }
+                            items(sortedCoins) { coin ->
+                                CoinListItem(
+                                    coin = coin,
+                                    onItemClick = { navContriller.navigate(Screen.CoinDetailScreen.route + "/${coin.id}") }
+                                )
+                                Spacer(modifier = Modifier.size((width * 0.05).dp))
+                            }
+                        }
+                    }
+
+                    1 -> {
+
+                        if (!registerViewModel.onCheckUser()) {
+
                             coinList.coins?.let { coins ->
-                                Log.d("fieivne", favoritesList.value.toString())
+
                                 val sortedCoins =
                                     if (coinListViewModel.activeIndex.value == 1) {
-                                    if (coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.cmc_rank.toInt() }
-                                    else favoritesList.value.sortedBy { it.cmc_rank.toInt() }
-                                } else if (coinListViewModel.activeIndex.value == 2) {
-                                    if (!coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.market_cap }
-                                    else favoritesList.value.sortedBy { it.market_cap }
-                                } else if (coinListViewModel.activeIndex.value == 3) {
-                                    if (!coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.price.toDouble() }
-                                    else  favoritesList.value.sortedBy { it.price.toDouble() }
-                                } else {
-                                    if (!coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.percent_change_24h }
-                                    else  favoritesList.value.sortedBy { it.percent_change_24h }
-                                }
+                                        if (coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.cmc_rank.toInt() }
+                                        else favoritesList.value.sortedBy { it.cmc_rank.toInt() }
+                                    } else if (coinListViewModel.activeIndex.value == 2) {
+                                        if (!coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.market_cap }
+                                        else favoritesList.value.sortedBy { it.market_cap }
+                                    } else if (coinListViewModel.activeIndex.value == 3) {
+                                        if (!coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.price.toDouble() }
+                                        else favoritesList.value.sortedBy { it.price.toDouble() }
+                                    } else {
+                                        if (!coinListViewModel.arrow.value) favoritesList.value.sortedByDescending { it.percent_change_24h }
+                                        else favoritesList.value.sortedBy { it.percent_change_24h }
+                                    }
 
                                 //берем монету из БД
                                 items(sortedCoins) { coin ->
                                     Log.d("coinren", coin.id.toString())
-                                   val favoriteItem = coins.firstOrNull { it.id == coin.coinId.toString() }
+                                    val favoriteItem =
+                                        coins.firstOrNull { it.id == coin.coinId.toString() }
+
 
                                     if (favoriteItem != null) {
                                         FavoritesListItem(
                                             favoriteItem,
                                             onItemClick = { navContriller.navigate(Screen.CoinDetailScreen.route + "/${coin.coinId}") }
-                                            )
+                                        )
                                     }
 
                                     Spacer(modifier = Modifier.size((width * 0.05).dp))
+
                                 }
+
 
                             }
-                        }
-                        2 -> {
-                            exchangeList.exchanges?.let { exchanges ->
+                        } else {
+                            item {
+                                Column(
+                                    modifier = Modifier
+                                        .size((width * 1).dp, (height * 0.4).dp),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    SuggestionChip(
+                                        onClick = { navContriller.navigate(Screen.LogInScreen.route) },
+                                        label = {
+                                            Text(
+                                                "Войти",
+                                                color = Color.Gray,
+                                                fontSize = 14.sp,
+                                                fontWeight = FontWeight.W500
+                                            )
+                                        }
+                                    )
 
-                                items(exchanges) { exchange ->
+                                    Spacer(modifier = Modifier.size((width * 0.1).dp))
 
-                                    ExchangeListItem(
-                                        width = width,
-                                        height = height,
-                                        exchange = exchange,
-                                        onItemClick = { navContriller.navigate(Screen.ExchangeDetailScreen.route + "/${exchange.id}") }
-                                        )
-                                    Spacer(modifier = Modifier.size((width * 0.05).dp))
+                                    SuggestionChip(
+                                        onClick = { navContriller.navigate(Screen.RegisterScreen.route) },
+                                        label = {
+                                            Text(
+                                                "Регистрация",
+                                                color = Color.Gray,
+                                                fontSize = 14.sp,
+                                                fontWeight = FontWeight.W500
+                                            )
+                                        }
+                                    )
                                 }
-
                             }
                         }
                     }
+
+                    2 -> {
+                        exchangeList.exchanges?.let { exchanges ->
+
+                            items(exchanges) { exchange ->
+
+                                ExchangeListItem(
+                                    width = width,
+                                    height = height,
+                                    exchange = exchange,
+                                    onItemClick = { navContriller.navigate(Screen.ExchangeDetailScreen.route + "/${exchange.id}") }
+                                )
+                                Spacer(modifier = Modifier.size((width * 0.05).dp))
+                            }
+
+                        }
+                    }
+                }
 
             }
         }

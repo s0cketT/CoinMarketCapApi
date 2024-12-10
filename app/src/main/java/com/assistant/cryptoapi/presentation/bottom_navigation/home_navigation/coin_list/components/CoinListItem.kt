@@ -95,7 +95,7 @@ fun CoinListItem(
                 .size((width * 0.3).dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
-                Text(text = "$${formatNumber(coin.quote.USD.price.toDouble())}",
+                Text(text = "$${viewModel.formatNumber(coin.quote.USD.price.toDouble())}",
                     color = Color.White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
@@ -111,7 +111,7 @@ fun CoinListItem(
             horizontalArrangement = Arrangement.End
         ) {
             if (viewModel.hourCount.value == 24) {
-                if (formatFloat(coin.quote.USD.percent_change_24h) != "0") {
+                if (viewModel.formatFloat(coin.quote.USD.percent_change_24h) != "0") {
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,
                         contentDescription = "Favorite Icon",
@@ -123,8 +123,8 @@ fun CoinListItem(
                 }
 
                 Text(
-                    text = "${formatFloat(coin.quote.USD.percent_change_24h)}%",
-                    color = if (formatFloat(coin.quote.USD.percent_change_24h) == "0") Color.Gray
+                    text = "${viewModel.formatFloat(coin.quote.USD.percent_change_24h)}%",
+                    color = if (viewModel.formatFloat(coin.quote.USD.percent_change_24h) == "0") Color.Gray
                     else if (coin.quote.USD.percent_change_24h < 0) Color.Red
                     else Color.Green,
                     fontSize = 15.sp,
@@ -134,7 +134,7 @@ fun CoinListItem(
                 )
             }
             else if (viewModel.hourCount.value == 1) {
-                if (formatFloat(coin.quote.USD.percent_change_1h) != "0") {
+                if (viewModel.formatFloat(coin.quote.USD.percent_change_1h) != "0") {
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,
                         contentDescription = "Favorite Icon",
@@ -146,8 +146,8 @@ fun CoinListItem(
                 }
 
                 Text(
-                    text = "${formatFloat(coin.quote.USD.percent_change_1h)}%",
-                    color = if (formatFloat(coin.quote.USD.percent_change_1h) == "0") Color.Gray
+                    text = "${viewModel.formatFloat(coin.quote.USD.percent_change_1h)}%",
+                    color = if (viewModel.formatFloat(coin.quote.USD.percent_change_1h) == "0") Color.Gray
                     else if (coin.quote.USD.percent_change_1h < 0) Color.Red
                     else Color.Green,
                     fontSize = 15.sp,
@@ -157,7 +157,7 @@ fun CoinListItem(
                 )
             }
             else if (viewModel.hourCount.value == 7) {
-                if (formatFloat(coin.quote.USD.percent_change_7d) != "0") {
+                if (viewModel.formatFloat(coin.quote.USD.percent_change_7d) != "0") {
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,
                         contentDescription = "Favorite Icon",
@@ -169,8 +169,8 @@ fun CoinListItem(
                 }
 
                 Text(
-                    text = "${formatFloat(coin.quote.USD.percent_change_7d)}%",
-                    color = if (formatFloat(coin.quote.USD.percent_change_7d) == "0") Color.Gray
+                    text = "${viewModel.formatFloat(coin.quote.USD.percent_change_7d)}%",
+                    color = if (viewModel.formatFloat(coin.quote.USD.percent_change_7d) == "0") Color.Gray
                     else if (coin.quote.USD.percent_change_7d < 0) Color.Red
                     else Color.Green,
                     fontSize = 15.sp,
@@ -180,7 +180,7 @@ fun CoinListItem(
                 )
             }
             else {
-                if (formatFloat(coin.quote.USD.percent_change_30d) != "0") {
+                if (viewModel.formatFloat(coin.quote.USD.percent_change_30d) != "0") {
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,
                         contentDescription = "Favorite Icon",
@@ -192,8 +192,8 @@ fun CoinListItem(
                 }
 
                 Text(
-                    text = "${formatFloat(coin.quote.USD.percent_change_30d)}%",
-                    color = if (formatFloat(coin.quote.USD.percent_change_30d) == "0") Color.Gray
+                    text = "${viewModel.formatFloat(coin.quote.USD.percent_change_30d)}%",
+                    color = if (viewModel.formatFloat(coin.quote.USD.percent_change_30d) == "0") Color.Gray
                     else if (coin.quote.USD.percent_change_30d < 0) Color.Red
                     else Color.Green,
                     fontSize = 15.sp,
@@ -205,18 +205,4 @@ fun CoinListItem(
         }
 
     }
-}
-
-fun formatFloat(value: Double): String {
-    // Убираем знак и округляем до 2 знаков после запятой
-    val absoluteValue = Math.abs(value)
-    val decimalFormat = DecimalFormat("#.##")
-    return decimalFormat.format(absoluteValue).replace('.', ',')
-}
-
-fun formatNumber(value: Double): String {
-    val numberFormat = NumberFormat.getInstance(Locale("ru", "RU"))
-    numberFormat.minimumFractionDigits = 2
-    numberFormat.maximumFractionDigits = 2
-    return numberFormat.format(value)
 }

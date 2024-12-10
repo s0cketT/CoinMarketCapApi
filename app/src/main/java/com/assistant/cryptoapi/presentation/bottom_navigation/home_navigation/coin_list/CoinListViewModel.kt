@@ -12,6 +12,9 @@ import com.assistant.cryptoapi.domain.use_case.get_coins.GetCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -94,5 +97,19 @@ class CoinListViewModel @Inject constructor(private val getCoinsUseCase: GetCoin
             amount >= 1_000_000 -> String.format("%.2fM", amount / 1_000_000)
             else -> String.format("%.2f", amount)
         }
+    }
+
+    fun formatFloat(value: Double): String {
+        // Убираем знак и округляем до 2 знаков после запятой
+        val absoluteValue = Math.abs(value)
+        val decimalFormat = DecimalFormat("#.##")
+        return decimalFormat.format(absoluteValue).replace('.', ',')
+    }
+
+    fun formatNumber(value: Double): String {
+        val numberFormat = NumberFormat.getInstance(Locale("ru", "RU"))
+        numberFormat.minimumFractionDigits = 2
+        numberFormat.maximumFractionDigits = 2
+        return numberFormat.format(value)
     }
 }

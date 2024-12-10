@@ -20,8 +20,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.formatFloat
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.formatNumber
 
 @Composable
 fun SearchCoinInfo(

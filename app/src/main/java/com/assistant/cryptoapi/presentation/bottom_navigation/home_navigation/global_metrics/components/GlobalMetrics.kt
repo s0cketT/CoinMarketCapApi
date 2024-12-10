@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,18 +49,22 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.assistant.cryptoapi.R
-import com.assistant.cryptoapi.presentation.Screen
 import com.assistant.cryptoapi.presentation.bottom_navigation.BottomNavigationViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.CoinListItem
-import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.formatFloat
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.global_metrics.GlobalMetricsViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.search_navigation.SearchViewModel
+import com.assistant.cryptoapi.presentation.navigation.Screen
 import com.assistant.cryptoapi.presentation.ui.theme.BackGroundBottomNav
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun GlobalMetrics(
     width: Int,
     bottomNavController: NavController,
+    navController: NavController,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
     viewmodel: GlobalMetricsViewModel = hiltViewModel(),
     searchViewModel: SearchViewModel = hiltViewModel(),
     bottomNavigationViewModel: BottomNavigationViewModel = hiltViewModel()
@@ -68,48 +73,51 @@ fun GlobalMetrics(
     val globalMetricsState = viewmodel.globalMetricsState.value
 
     Log.d("state22", globalMetricsState.toString())
-    Box(modifier = Modifier.fillMaxSize()) {
-        globalMetricsState.coin?.let { coin ->
-            Column(modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                Row(modifier = Modifier
-                    .size((width * 1).dp, (width * 0.1).dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                    Text("Рынок",
-                        color = Color.White,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
-                        )
+    Column(modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+        Row(modifier = Modifier
+            .size((width * 1).dp, (width * 0.1).dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("Рынок",
+                color = Color.White,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
+            )
 
-                    Row(modifier = Modifier,
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                        IconButton(onClick = {
-                            bottomNavController.navigate(Screen.BottomNavigationSearchScreen.route)
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "Favorite Icon",
-                                tint = Color.Gray,
-                                modifier = Modifier.size((width * 0.08).dp)
-                            )
-                        }
-
-                        IconButton(onClick = {}) {
-                            Icon(
-                                imageVector = Icons.Filled.AccountCircle,
-                                contentDescription = "Favorite Icon",
-                                tint = Color.Gray,
-                                modifier = Modifier.size((width * 0.08).dp)
-                            )
-                        }
-                    }
+            Row(modifier = Modifier,
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                IconButton(onClick = {
+                    bottomNavController.navigate(Screen.BottomNavigationSearchScreen.route)
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Favorite Icon",
+                        tint = Color.Gray,
+                        modifier = Modifier.size((width * 0.08).dp)
+                    )
                 }
+
+                IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                    Icon(
+                        imageVector = Icons.Filled.AccountCircle,
+                        contentDescription = "Favorite Icon",
+                        tint = Color.Gray,
+                        modifier = Modifier.size((width * 0.08).dp)
+                    )
+                }
+            }
+        }
+
+        globalMetricsState.coin?.let { coin ->
+            Box(modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+                ) {
 
                 Spacer(modifier = Modifier.size(10.dp))
 
@@ -136,7 +144,7 @@ fun GlobalMetrics(
 
                                 Text(text = "$${viewmodel.formatLargeCurrency(coin.data.quote.USD.total_market_cap)}",
                                     color = Color.White,
-                                    fontSize = 18.sp,
+                                    fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold,
                                 )
 
@@ -161,7 +169,7 @@ fun GlobalMetrics(
                                         if (viewmodel.formatFloat(coin.data.quote.USD.total_market_cap_yesterday_percentage_change) == "0") Color.Gray
                                         else if (coin.data.quote.USD.total_market_cap_yesterday_percentage_change < 0) Color.Red
                                         else Color.Green,
-                                        fontSize = 15.sp,
+                                        fontSize = 12.sp,
                                         fontWeight = FontWeight.Bold,
                                         fontStyle = FontStyle.Italic,
                                     )
@@ -187,7 +195,7 @@ fun GlobalMetrics(
 
                                 Text(text = "$${viewmodel.formatLargeCurrency(coin.data.quote.USD.total_volume_24h)}",
                                     color = Color.White,
-                                    fontSize = 18.sp,
+                                    fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold,
                                 )
 
@@ -212,7 +220,7 @@ fun GlobalMetrics(
                                         if (viewmodel.formatFloat(coin.data.quote.USD.total_volume_24h_yesterday_percentage_change) == "0") Color.Gray
                                         else if (coin.data.quote.USD.total_volume_24h_yesterday_percentage_change < 0) Color.Red
                                         else Color.Green,
-                                        fontSize = 15.sp,
+                                        fontSize = 12.sp,
                                         fontWeight = FontWeight.Bold,
                                         fontStyle = FontStyle.Italic,
                                     )
@@ -237,7 +245,7 @@ fun GlobalMetrics(
 
                                 Text(text = "$${viewmodel.formatFloat(coin.data.btc_dominance)}%",
                                     color = Color.White,
-                                    fontSize = 18.sp,
+                                    fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold,
                                 )
 
@@ -246,13 +254,13 @@ fun GlobalMetrics(
                                     horizontalArrangement = Arrangement.Start
                                 ) {
                                     Image(painterResource(R.drawable.logo_bitcoin), contentDescription = "",
-                                        modifier = Modifier.size((width * 0.04).dp)
+                                        modifier = Modifier.size((width * 0.035).dp)
                                         )
 
                                     Text(
                                         text = "BTC",
                                         color = Color.Gray,
-                                        fontSize = 15.sp,
+                                        fontSize = 14.sp,
                                         fontWeight = FontWeight.Bold,
                                         fontStyle = FontStyle.Italic,
                                         fontFamily = FontFamily.Serif
@@ -278,7 +286,7 @@ fun GlobalMetrics(
 
                                 Text(text = "$${viewmodel.formatFloat(coin.data.eth_dominance)}%",
                                     color = Color.White,
-                                    fontSize = 18.sp,
+                                    fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold,
                                 )
 
@@ -287,13 +295,13 @@ fun GlobalMetrics(
                                     horizontalArrangement = Arrangement.Start
                                 ) {
                                     Image(painterResource(R.drawable.logo_ethir), contentDescription = "",
-                                        modifier = Modifier.size((width * 0.04).dp)
+                                        modifier = Modifier.size((width * 0.035).dp)
                                     )
 
                                     Text(
                                         text = "ETH",
                                         color = Color.Gray,
-                                        fontSize = 15.sp,
+                                        fontSize = 14.sp,
                                         fontWeight = FontWeight.Bold,
                                         fontStyle = FontStyle.Italic,
                                         fontFamily = FontFamily.Serif
@@ -308,7 +316,7 @@ fun GlobalMetrics(
 
 
         if (globalMetricsState.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            CircularProgressIndicator(modifier = Modifier)
         }
         if (globalMetricsState.error.isNotBlank()) {
             Text(
@@ -318,7 +326,7 @@ fun GlobalMetrics(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding (horizontal = 20. dp)
-                    .align (Alignment. Center)
+
             )
         }
     }
