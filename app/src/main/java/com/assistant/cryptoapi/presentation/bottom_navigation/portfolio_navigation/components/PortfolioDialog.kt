@@ -114,15 +114,14 @@ fun PortfolioDialog(
                             if (portfolioViewModel.textCount.value != "") {
                                 portfolioViewModel.onTextCountIsNull(false)
 
-                                Log.d("vnkerive", list.value.toString())
+                                val filteredList = list.value.filter { it.mail == portfolioViewModel.getUserMail() }
 
-                                if (list.value.isNotEmpty()) {
+                                if (filteredList.isNotEmpty()) {
                                     portfolioViewModel.repetition.value =
-                                        portfolioViewModel.findItemWithId(list.value, portfolioViewModel.coinClick.value.id.toInt())!!
+                                        portfolioViewModel.findItemWithId(filteredList, portfolioViewModel.coinClick.value.id.toInt())!!
                                 }
 
-
-                                if (portfolioViewModel.repetition.value.id != -1) {
+                                if (portfolioViewModel.repetition.value.id != -1 && portfolioViewModel.isMailExists(filteredList, portfolioViewModel.getUserMail()!!)) {
                                     portfolioViewModel.updateCoin(
                                         CoinPortfolioDB(
                                             portfolioViewModel.repetition.value.id,
@@ -139,7 +138,7 @@ fun PortfolioDialog(
                                                 portfolioViewModel.textCount.value.toDouble(),
                                             ).toString(),
                                             (portfolioViewModel.textCount.value.toDouble() + portfolioViewModel.repetition.value.count),
-                                            (portfolioViewModel.repetition.value.buyPrice.toDouble() + portfolioViewModel.formatNumberToTrueDouble(portfolioViewModel.textPrice.value)),
+                                            (portfolioViewModel.repetition.value.buyPrice + portfolioViewModel.formatNumberToTrueDouble(portfolioViewModel.textPrice.value)),
                                         )
                                     )
 

@@ -37,6 +37,7 @@ import com.assistant.cryptoapi.domain.model.CoinListResponse
 import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.CoinDetailViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.HourCoinsItem
+import com.assistant.cryptoapi.presentation.ui.theme.CastomGray
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
@@ -68,7 +69,7 @@ fun CoinListItem(
             Text(text = "${coin.cmc_rank}",
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                color = CastomGray,
                 fontWeight = FontWeight.Bold,
                 fontFamily=FontFamily.Serif
                 )
@@ -85,7 +86,7 @@ fun CoinListItem(
 
                 Text(text = "$${viewModel.formatLargeCurrency(coin.quote.USD.market_cap)}",
                     fontSize = 15.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                    color = Color.Gray,
                     fontFamily=FontFamily.Serif
                     )
 
@@ -106,7 +107,7 @@ fun CoinListItem(
         }
 
         Row(modifier = Modifier
-            .size((width * 0.2).dp),
+            .size((width * 0.25).dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {

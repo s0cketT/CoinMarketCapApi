@@ -1,6 +1,10 @@
 package com.assistant.cryptoapi.presentation.navigation.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -15,6 +19,8 @@ import com.assistant.cryptoapi.presentation.bottom_navigation.profile_navigation
 import com.assistant.cryptoapi.presentation.bottom_navigation.profile_navigation.log_in.components.LogInScreen
 import com.assistant.cryptoapi.presentation.bottom_navigation.profile_navigation.register.components.RegisterScreen
 import com.assistant.cryptoapi.presentation.navigation.Screen
+import com.assistant.cryptoapi.presentation.ui.theme.BackGround
+import com.assistant.cryptoapi.presentation.ui.theme.TopCoinsColor
 
 @Composable
 fun Navigation() {
@@ -30,7 +36,8 @@ fun Navigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.BottomNavigationScreen.route
+        startDestination = Screen.BottomNavigationScreen.route,
+        modifier = Modifier.background(BackGround).systemBarsPadding()
     ) {
 
         composable("${Screen.BottomNavigationScreen.route}") {

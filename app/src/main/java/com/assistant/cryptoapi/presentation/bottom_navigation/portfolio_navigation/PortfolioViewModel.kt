@@ -41,9 +41,6 @@ class PortfolioViewModel @Inject constructor(private val database: MainDatabase,
 
     val focusRequester = FocusRequester()
 
-    private val _money = mutableStateOf("")
-    val money: State<String> = _money
-    fun onChangeMoney(money: String) { _money.value = money }
 
     fun getMoney(list: List<CoinPortfolioDB>): Double {
         return list
@@ -206,4 +203,10 @@ class PortfolioViewModel @Inject constructor(private val database: MainDatabase,
             database.daoPortfolio.delete(coin)
         }
     }
+
+
+    fun isMailExists(list: List<CoinPortfolioDB>, mail: String): Boolean {
+        return list.any { it.mail == mail }
+    }
+
 }

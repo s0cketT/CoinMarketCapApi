@@ -103,8 +103,7 @@ fun CoinDetailScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(1f)
-                .padding(10.dp)
-                .padding(top = (height * 0.03).dp),
+                .padding(10.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -223,7 +222,12 @@ fun CoinDetailScreen(
                                 Icon(
                                     imageVector = Icons.Outlined.Star,
                                     contentDescription = "",
-                                    tint = if (coinDetailviewModel.star.value) StarCoinDetail else Color.Gray,
+                                    tint =
+                                    if (!profileViewModel.onCheckUser()) {
+                                        if (coinDetailviewModel.star.value) StarCoinDetail else Color.Gray
+                                    }
+                                    else Color.Gray
+                                    ,
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }

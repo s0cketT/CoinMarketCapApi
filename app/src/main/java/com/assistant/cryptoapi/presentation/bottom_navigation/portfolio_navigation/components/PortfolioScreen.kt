@@ -50,7 +50,7 @@ fun PortfolioScreen(
     val height = LocalConfiguration.current.screenHeightDp
 
     val list = portfolioViewModel.list.collectAsState(emptyList())
-
+    Log.d("portfolioViewModel.list", list.value.toString())
 
     Box(modifier = Modifier.fillMaxSize().background(BackGround),
         contentAlignment = Alignment.Center

@@ -1,5 +1,6 @@
 package com.assistant.cryptoapi.presentation.bottom_navigation
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
@@ -24,9 +25,12 @@ import com.assistant.cryptoapi.domain.repository.UserRepository
 import com.assistant.cryptoapi.presentation.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @HiltViewModel
-class BottomNavigationViewModel @Inject constructor(private val userRepository: UserRepository): ViewModel() {
+class BottomNavigationViewModel @Inject constructor(
+    private val userRepository: UserRepository
+): ViewModel() {
 
     val items = listOf(
         BottomNavigationItem(
@@ -62,6 +66,8 @@ class BottomNavigationViewModel @Inject constructor(private val userRepository: 
 
     fun selectItem(index: Int) {
         _selectedItemIndex.value = index
+
     }
+
 
 }

@@ -1,6 +1,7 @@
 package com.assistant.cryptoapi.presentation.bottom_navigation.search_navigation.components
 
 import android.icu.text.ListFormatter.Width
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.assistant.cryptoapi.presentation.bottom_navigation.BottomNavigationViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.coin_detail.components.CoinDetailScreen
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.components.CoinListItem
@@ -66,6 +68,7 @@ fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel(),
     coinsViewModel: CoinListViewModel = hiltViewModel(),
     exchangesViewModel: ExchangeListViewModel = hiltViewModel(),
+    bottomNavigationViewModel: BottomNavigationViewModel = hiltViewModel()
     ) {
 
     val focusRequester = searchViewModel.focusRequester
@@ -75,15 +78,13 @@ fun SearchScreen(
 
     val text = searchViewModel.text.value
 
-
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(BackGround)
-        .padding(top = (height * 0.05).dp),
+        .background(BackGround),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
         ) {

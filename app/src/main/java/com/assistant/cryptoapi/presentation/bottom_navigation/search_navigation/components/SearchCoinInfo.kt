@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.assistant.cryptoapi.presentation.ui.theme.CastomGray
 
 @Composable
 fun SearchCoinInfo(
@@ -38,7 +39,7 @@ fun SearchCoinInfo(
             Text(
                 text = "Монета",
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                color = CastomGray,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Serif
             )
@@ -46,7 +47,7 @@ fun SearchCoinInfo(
 
             Text(
                 text = "Цена",
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                color = CastomGray,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Serif
@@ -63,7 +64,7 @@ fun SearchCoinInfo(
 
             Text(
                 text = "$24h%",
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                color = CastomGray,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Italic,

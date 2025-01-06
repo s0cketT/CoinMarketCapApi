@@ -55,6 +55,7 @@ import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.gl
 import com.assistant.cryptoapi.presentation.bottom_navigation.search_navigation.SearchViewModel
 import com.assistant.cryptoapi.presentation.navigation.Screen
 import com.assistant.cryptoapi.presentation.ui.theme.BackGroundBottomNav
+import com.assistant.cryptoapi.presentation.ui.theme.CastomGray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -72,7 +73,6 @@ fun GlobalMetrics(
 
     val globalMetricsState = viewmodel.globalMetricsState.value
 
-    Log.d("state22", globalMetricsState.toString())
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -92,16 +92,6 @@ fun GlobalMetrics(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = {
-                    bottomNavController.navigate(Screen.BottomNavigationSearchScreen.route)
-                }) {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "Favorite Icon",
-                        tint = Color.Gray,
-                        modifier = Modifier.size((width * 0.08).dp)
-                    )
-                }
 
                 IconButton(onClick = { scope.launch { drawerState.open() } }) {
                     Icon(
@@ -138,7 +128,7 @@ fun GlobalMetrics(
                                 horizontalAlignment = Alignment.Start
                                 ) {
                                 Text(text = "Рын.кап.",
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                                    color = CastomGray,
                                     fontSize = 10.sp,
                                     )
 
@@ -158,7 +148,7 @@ fun GlobalMetrics(
                                             contentDescription = "Favorite Icon",
                                             tint = if (coin.data.quote.USD.total_market_cap_yesterday_percentage_change < 0) Color.Red else Color.Green,
                                             modifier = Modifier
-                                                .rotate(if (coin.data.quote.USD.total_market_cap_yesterday_percentage_change < 0) 180f else 0f)
+                                                .rotate(if (coin.data.quote.USD.total_market_cap_yesterday_percentage_change < 0) 0f else 180f)
                                                 .size((width * 0.05).dp)
                                         )
                                     }
@@ -189,7 +179,7 @@ fun GlobalMetrics(
                                 horizontalAlignment = Alignment.Start
                             ) {
                                 Text(text = "Объем",
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                                    color = CastomGray,
                                     fontSize = 10.sp,
                                 )
 
@@ -209,7 +199,7 @@ fun GlobalMetrics(
                                             contentDescription = "Favorite Icon",
                                             tint = if (coin.data.quote.USD.total_volume_24h_yesterday_percentage_change < 0) Color.Red else Color.Green,
                                             modifier = Modifier
-                                                .rotate(if (coin.data.quote.USD.total_volume_24h_yesterday_percentage_change < 0) 180f else 0f)
+                                                .rotate(if (coin.data.quote.USD.total_volume_24h_yesterday_percentage_change < 0) 0f else 180f)
                                                 .size((width * 0.05).dp)
                                         )
                                     }
@@ -239,7 +229,7 @@ fun GlobalMetrics(
                                 horizontalAlignment = Alignment.Start
                             ) {
                                 Text(text = "Доминация",
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                                    color = CastomGray,
                                     fontSize = 10.sp,
                                 )
 
@@ -280,7 +270,7 @@ fun GlobalMetrics(
                                 horizontalAlignment = Alignment.Start
                             ) {
                                 Text(text = "Доминация",
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                                    color = CastomGray,
                                     fontSize = 10.sp,
                                 )
 

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.coin_list.CoinListViewModel
+import com.assistant.cryptoapi.presentation.ui.theme.CastomGray
 
 @Composable
 fun InfoCoins(
@@ -56,7 +57,7 @@ fun InfoCoins(
             ) {
                 Text(
                     text = "#",
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    color = CastomGray,
                     fontSize = 14.sp
                 )
 
@@ -88,7 +89,7 @@ fun InfoCoins(
             ) {
                 Text(
                     text = "Рын.кап.",
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    color = CastomGray,
                     fontSize = 14.sp
                 )
 
@@ -127,7 +128,7 @@ fun InfoCoins(
 
                     Text(
                         text = "Цена",
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        color = CastomGray,
                         fontSize = 14.sp
                     )
 
@@ -166,7 +167,7 @@ fun InfoCoins(
             ) {
                 Text(
                     text = viewModel.hour.value,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    color = CastomGray,
                     fontSize = 14.sp
                 )
 

@@ -43,7 +43,7 @@ fun CoinSearchListItem(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Row(modifier = Modifier.size((width * 0.6).dp),
+        Row(modifier = Modifier.size((width * 0.55).dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -68,7 +68,7 @@ fun CoinSearchListItem(
 
         Row(
             modifier = Modifier
-                .size((width * 0.2).dp),
+                .size((width * 0.25).dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
@@ -78,7 +78,7 @@ fun CoinSearchListItem(
                     contentDescription = "Favorite Icon",
                     tint = if (coin.quote.USD.percent_change_24h < 0) Color.Red else Color.Green,
                     modifier = Modifier
-                        .rotate(if (coin.quote.USD.percent_change_24h < 0) 0f else 0f)
+                        .rotate(if (coin.quote.USD.percent_change_24h < 0) 0f else 180f)
                         .size((width * 0.05).dp)
                 )
             }

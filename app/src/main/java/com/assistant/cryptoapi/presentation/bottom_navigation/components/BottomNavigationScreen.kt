@@ -1,6 +1,7 @@
 package com.assistant.cryptoapi.presentation.bottom_navigation.components
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,6 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.assistant.cryptoapi.R
 import com.assistant.cryptoapi.presentation.bottom_navigation.BottomNavigationViewModel
 import com.assistant.cryptoapi.presentation.bottom_navigation.home_navigation.components.HomeScreen
 import com.assistant.cryptoapi.presentation.bottom_navigation.portfolio_navigation.PortfolioViewModel
@@ -77,22 +80,20 @@ fun BottomNavigationScreen(
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        gesturesEnabled = drawerState.isOpen, // Включение жестов только при открытом состоянии
+        gesturesEnabled = true, // Включение жестов только при открытом состоянии
         scrimColor = Color.Black.copy(alpha = 0.4f), // Затемнение фона
         drawerContent = {
 
-            Box(
+            Column (
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth(0.8f) // Панель занимает половину экрана
                     .background(TopCoinsColor)
-                    .padding(16.dp)
-
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = (width * 0.1).dp),
+                    modifier = Modifier,
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.Start
                 ) {
@@ -158,6 +159,25 @@ fun BottomNavigationScreen(
 
                     }
                 }
+
+                Box(modifier = Modifier
+                    .size((width * 1).dp, (width * 0.08).dp),
+                    contentAlignment = Alignment.BottomEnd
+                ) {
+                    IconButton(
+                        {
+
+                        },
+                        modifier = Modifier.size((width * 0.08).dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.info),
+                            contentDescription = "Favorite Icon",
+                            tint = Color.Gray,
+                            modifier = Modifier.size((width * 0.12).dp)
+                        )
+                    }
+                }
             }
         },
         content = {
@@ -169,10 +189,11 @@ fun BottomNavigationScreen(
                 Scaffold(
                     bottomBar = {
                         NavigationBar(modifier = Modifier
-                            .size((width * 1).dp, (height * 0.15).dp),
+                            .size((width * 1).dp, (height * 0.1).dp),
                             containerColor = BackGroundBottomNav
                         ) {
                             bottomNavigationViewModel.items.forEachIndexed { index, item ->
+
                                 NavigationBarItem(
                                     selected = bottomNavigationViewModel.selectedItemIndex.value == index,
                                     onClick = {
@@ -186,7 +207,6 @@ fun BottomNavigationScreen(
                                     },
                                     alwaysShowLabel = false,
                                     icon = {
-
                                         Icon(
                                             imageVector = if (index == bottomNavigationViewModel.selectedItemIndex.value) {
                                                 item.selectedIcon
@@ -195,7 +215,6 @@ fun BottomNavigationScreen(
                                             tint = if (index == bottomNavigationViewModel.selectedItemIndex.value) Color.Blue
                                             else Color.Gray
                                         )
-
                                     },
                                     colors = NavigationBarItemDefaults.colors(
                                         indicatorColor = Color.Transparent

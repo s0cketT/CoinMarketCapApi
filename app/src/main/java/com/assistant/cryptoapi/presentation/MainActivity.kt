@@ -55,94 +55,12 @@ class MainActivity : ComponentActivity() {
                 }*/
 
                 Navigation()
-                    //ModalDrawerRightSideExample()
-                //RightSideModalDrawerDemo()
+
             }
         }
     }
 }
 
-
-
-
-@Composable
-fun ModalDrawerRightSideExample() {
-    // Управление состоянием выдвижной панели
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        gesturesEnabled = drawerState.isOpen, // Включение жестов только при открытом состоянии
-        scrimColor = MaterialTheme.colorScheme.scrim, // Затемнение фона
-        drawerContent = {
-            // Содержимое выдвижной панели
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(0.5f) // Панель занимает половину экрана
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(16.dp)
-
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Text(
-                        text = "Меню",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                    Divider(color = MaterialTheme.colorScheme.onSurface)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Пункт 1",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { /* Обработка нажатия */ }
-                            .padding(8.dp)
-                    )
-                    Text(
-                        text = "Пункт 2",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { /* Обработка нажатия */ }
-                            .padding(8.dp)
-                    )
-                    Text(
-                        text = "Пункт 3",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { /* Обработка нажатия */ }
-                            .padding(8.dp)
-                    )
-                }
-            }
-        },
-        content = {
-            // Основной экран
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    onClick = {
-                        // Открываем выдвижную панель
-                        scope.launch { drawerState.open() }
-                    }
-                ) {
-                    Text("Открыть панель справа")
-                }
-            }
-        }
-    )
-}
 
 
 

@@ -45,7 +45,7 @@ object DatabaseModule {
     }
 }
 
-@Database(entities = [CoinDB::class, CoinPortfolioDB::class, UserDB::class], version = 2)
+@Database(entities = [CoinDB::class, CoinPortfolioDB::class, UserDB::class], version = 1)
 abstract class MainDatabase : RoomDatabase() {
     abstract val daoFavorite: CoinDao
     abstract val daoPortfolio: PortfolioDao

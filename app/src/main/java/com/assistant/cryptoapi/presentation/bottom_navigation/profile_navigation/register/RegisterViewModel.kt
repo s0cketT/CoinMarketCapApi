@@ -46,15 +46,6 @@ class RegisterViewModel @Inject constructor(private val database: MainDatabase, 
     }
 
 
-    fun getUserMail(): String? { return userRepository.mail }
-    fun getUserPas(): String? { return userRepository.pas }
-    fun getUserMoney(): Double? { return userRepository.money }
-
-    fun findUserIdByLogin(users: List<UserDB>, login: String?): Int? {
-        return users.find { it.login == login }?.id
-    }
-
-
     fun insertUser(user: UserDB) {
         viewModelScope.launch {
             database.daoUser.insertUser(user)

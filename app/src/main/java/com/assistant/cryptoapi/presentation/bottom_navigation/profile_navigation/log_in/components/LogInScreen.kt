@@ -159,8 +159,7 @@ fun LogInScreen(
         }
 
         Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(top = (width * 0.1).dp, bottom = (width * 0.15).dp),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
